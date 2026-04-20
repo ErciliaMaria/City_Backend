@@ -14,6 +14,15 @@ class Cidade extends Model
 
     protected $keyType = 'string';
 
+    protected $fillable = [
+        'id',
+        'uf_id',
+        'nome',
+        'cep',
+        'ddd',
+        'codigo_ibge',
+    ];
+
     public function uf(): BelongsTo
     {
         return $this->belongsTo(Uf::class);
