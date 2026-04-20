@@ -19,8 +19,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $ufs = collect(UfFactory::ufCodes())
-            ->map(fn (string $siglaUf) => Uf::factory()->create([
+        $ufs = collect(UfFactory::ufStates())
+            ->map(fn (string $estado, string $siglaUf) => Uf::factory()->create([
+                'estado' => $estado,
                 'uf' => $siglaUf,
             ]));
 

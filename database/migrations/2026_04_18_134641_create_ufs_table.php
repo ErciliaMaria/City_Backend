@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('ufs', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->char('uf', 2); // Ex: SP, RJ, CE
+            $table->string('estado', 100); // Ex: São Paulo, Rio de Janeiro, Ceará
+            $table->char('uf', 2)->unique(); // Ex: SP, RJ, CE
             $table->timestamps();
         });
     }

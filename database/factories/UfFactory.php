@@ -14,12 +14,36 @@ class UfFactory extends Factory
     protected $model = Uf::class;
 
     /**
-     * @var array<int, string>
+     * @var array<string, string>
      */
-    private const UFS = [
-        'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
-        'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
-        'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
+    private const UF_STATES = [
+        'AC' => 'Acre',
+        'AL' => 'Alagoas',
+        'AP' => 'Amapa',
+        'AM' => 'Amazonas',
+        'BA' => 'Bahia',
+        'CE' => 'Ceara',
+        'DF' => 'Distrito Federal',
+        'ES' => 'Espirito Santo',
+        'GO' => 'Goias',
+        'MA' => 'Maranhao',
+        'MT' => 'Mato Grosso',
+        'MS' => 'Mato Grosso do Sul',
+        'MG' => 'Minas Gerais',
+        'PA' => 'Para',
+        'PB' => 'Paraiba',
+        'PR' => 'Parana',
+        'PE' => 'Pernambuco',
+        'PI' => 'Piaui',
+        'RJ' => 'Rio de Janeiro',
+        'RN' => 'Rio Grande do Norte',
+        'RS' => 'Rio Grande do Sul',
+        'RO' => 'Rondonia',
+        'RR' => 'Roraima',
+        'SC' => 'Santa Catarina',
+        'SP' => 'Sao Paulo',
+        'SE' => 'Sergipe',
+        'TO' => 'Tocantins',
     ];
 
     /**
@@ -27,7 +51,15 @@ class UfFactory extends Factory
      */
     public static function ufCodes(): array
     {
-        return self::UFS;
+        return array_keys(self::UF_STATES);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function ufStates(): array
+    {
+        return self::UF_STATES;
     }
 
     /**
@@ -35,9 +67,12 @@ class UfFactory extends Factory
      */
     public function definition(): array
     {
+        $uf = fake()->randomElement(array_keys(self::UF_STATES));
+
         return [
             'id' => (string) Str::uuid(),
-            'uf' => fake()->unique()->randomElement(self::UFS),
+            'estado' => self::UF_STATES[$uf],
+            'uf' => $uf,
         ];
     }
 }
