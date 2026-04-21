@@ -2,39 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\City\ViaCepService;
+use App\Contracts\City\Service\CepServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CepController extends Controller
 {
-    public function __construct(private ViaCepService $viaCepService)
+    public function __construct(private CepServiceInterface $cepService)
     {
     }
 
     /**
      * Fetch city data by CEP
-     * 
+     *
      * @param Request $request
      * @return JsonResponse
      */
-    public function searchByCep(Request $request): JsonResponse
+    public function execute(Request $request): JsonResponse
     {
         try {
-            $validated = $request->validate([
-                'cep' => 'required|string|min:8|max:9',
-            ]);
-
-            $data = $this->viaCepService->fetchByCep($validated['cep']);
-
-            if ($data === null) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'CEP not found',
-                    'data' => null,
-                ], 404);
-            }
+            $data = $this->cepService->searchByCep((string) $request->input('cep', ''));
 
             return response()->json([
                 'success' => true,

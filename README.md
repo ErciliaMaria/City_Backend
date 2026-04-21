@@ -1,59 +1,124 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# City_Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Backend para consulta e listagem de cidades, com integração de busca por CEP via ViaCEP.
 
-## About Laravel
+## Sobre o projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Este repositório contém uma API em Laravel com foco em:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Listagem paginada de cidades com filtro por nome.
+- Busca de dados de cidade a partir de um CEP (Integração via API).
+- Ambiente de desenvolvimento com Laravel Sail.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Stack
 
-## Learning Laravel
+- PHP 8.5.5
+- Laravel 10
+- Laravel Sail (Docker)
+- PostgreSQL
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Clonando o projeto
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Use SSH para clonar:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone git@github.com:ErciliaMaria/City_Backend.git
+cd City_Backend
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Pré-requisitos
 
-## Contributing
+- Docker e Docker Compose instalados
+- Composer instalado na máquina
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Subindo o projeto com Laravel Sail
 
-## Code of Conduct
+1. Instale as dependências PHP:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer install
+```
 
-## Security Vulnerabilities
+2. Crie o arquivo de ambiente:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+```
 
-## License
+3. Suba os containers:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# City_Backend
+```bash
+./vendor/bin/sail up -d
+```
+
+4. Gere a APP_KEY:
+
+```bash
+./vendor/bin/sail artisan key:generate
+```
+
+5. Rode as migrations:
+
+```bash
+./vendor/bin/sail artisan migrate
+```
+
+6. Popule o banco com seed:
+
+```bash
+./vendor/bin/sail artisan db:seed
+```
+
+## Comandos úteis
+
+- Parar containers:
+
+```bash
+./vendor/bin/sail down
+```
+
+## Estrutura de banco (resumo)
+
+### Tabela ufs
+
+- id (UUID, PK)
+- estado (string)
+- uf (char 2, único)
+- timestamps
+
+### Tabela cidades
+
+- id (UUID, PK)
+- uf_id (UUID, FK -> ufs.id)
+- nome (string)
+- cep (string, nullable)
+- ddd (integer, nullable)
+- codigo_ibge (string, nullable)
+- timestamps
+
+## Seeders
+
+O DatabaseSeeder:
+
+- Cria todas as UFs brasileiras.
+- Cria 8 cidades por UF via factory.
+
+## Rotas da API e funcionalidades
+
+Base URL local: http://localhost
+
+## Listagem de Cidades
+- Método: GET
+- Rota: /api/v1/cities
+- Controller: CityController
+- Listagem e paginação das Cidades.
+
+### Busca por CEP
+
+- Método: POST
+- Rota: /api/v1/cep/search
+- Controller: CepController@execute
+- Funcionalidade: consulta o ViaCEP (API de integração) e retorna dados da cidade para o CEP informado.
+
+
+

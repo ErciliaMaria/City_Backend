@@ -2,14 +2,9 @@
 
 namespace App\Contracts\City\Repository;
 
-use App\DTO\City\ListCityDTO;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface ListCityRepositoryInterface
 {
-    /**
-     * @var {ListCityDTO} $dto
-     * @return JsonResponse
-     */
-    public function execute(ListCityDTO $dto): JsonResponse;
+    public function execute(int $page, int $limit, string $search): LengthAwarePaginator;
 }

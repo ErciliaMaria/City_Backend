@@ -2,27 +2,23 @@
 
 namespace App\Services\City;
 
+use App\Contracts\City\Repository\ListCityRepositoryInterface;
 use App\Contracts\City\Service\ListCityServiceInterface;
 use App\DTO\City\ListCityDTO;
-use App\Models\Cidade;
 use Illuminate\Http\JsonResponse;
 
 class ListCityService implements ListCityServiceInterface
 {
+    public function __construct(private ListCityRepositoryInterface $listCityRepository)
+    {
+    }
+
     public function execute(ListCityDTO $dto): JsonResponse
     {
         $page = max(1, (int) $dto->page);
         $limit = max(1, (int) $dto->limit);
 
-        $query = Cidade::query()->with('uf');
-
-        if ($dto->search !== '') {
-            $query->where('nome', 'like', '%' . $dto->search . '%');
-        }
-
-        $cities = $query
-            ->orderBy('nome')
-            ->paginate(perPage: $limit, page: $page);
+        $cities = $this->listCityRepository->execute($page, $limit, $dto->search);
 
         return response()->json([
             'success' => true,
