@@ -117,7 +117,7 @@ Base URL local: http://localhost
 
 - Método: POST
 - Rota: /api/v1/cep/search
-- Controller: CepController@execute
+- Controller: CepController
 - Funcionalidade: consulta o ViaCEP (API de integração) e retorna dados da cidade para o CEP informado.
 
 
